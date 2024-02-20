@@ -9,7 +9,7 @@ I guess a great place to start would be the technical architecture of the projec
 
 ![credit-risk-modelling](https://github.com/peterchettiar/credit-risk-modelling/assets/89821181/e6dd9079-9f2b-406a-915c-f2c06555cd60)
 
-# EDA
+# Exploratory Data Analysis
 
 An important first step would be to have a good understanding of the dataset. So typically there are a few things I would like to look at:
 1. The proportion of **missing values** for each feature - depending on the size of the dataset, you can either choose to drop the rows with the missing values or impute based on the distribution of the data for the feature in question without having to compromise on accuracy while training the model (i.e. model must have enough data to be trained on)
