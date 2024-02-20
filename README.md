@@ -74,3 +74,35 @@ for model in tqdm(parameters.multiclass_algos_list):
         best_score = score
         best_model = model
 ```
+And from this we realise that `GradientBoostingClassifier()` performed the best with a roc-auc-score of 98%.
+
+## Model Pipeline and HyperParameter Tuning
+
+Now comes the last part of the project. Our model selection gave us the best performing model but it should be noted that the parameters were not specifed, and that the default values were used. 
+
+This is where hyperparameter tuning comes in. I decided to experiment with three parameters: `n-estimators`, `learning_rate`, `max-depth`, and do a `RandomisedGridSearch` on a specified range not too far from the default values given the performance on default parameters were pretty good.
+
+A sample of the code for this portion is as follows:
+```
+# next we need to define our parameter grid
+# since the default values performed pretty well, our grid search should not be too far off from the default
+
+parameters.param_grid = {
+    'best_model__n_estimators': randint(90,110), # default = 100
+    'best_model__learning_rate': uniform(0.08,0.12), # default = 0.1
+    'best_model__max_depth': randint(1,5) # default = 3
+}
+
+# now that we have our model and parameter grid, we can perform the grid search
+# since the default parameters performed pretty well, 
+
+best_model_tuned = RandomizedSearchCV(best_model_pipeline,
+                                      param_distributions=parameters.param_grid,
+                                      scoring='roc_auc_ovr_weighted',
+                                      n_iter=2,
+                                      random_state=42)
+
+best_model_tuned.fit(X_train, y_train)
+```
+
+Now that we have trained the model, we can make predictions on the test set. And after comparing the predictions with the actual test target, we find that the model was 95.79% accurate. That concludes the project.
