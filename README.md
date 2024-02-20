@@ -37,7 +37,7 @@ The first step would be to create Pipeline objects that contain the steps for tr
 
 For feature transform, we can combine our Pipeline objects into one `ColumnTransformer` object.
 
-At this point, since we have done the necessary transformations, we can do a train-test split to enable model building. Next, I selected the following algorithms because they are the most popular onces when dealing with multi-class classification:
+At this point, since we have done the necessary transformations, we can do a train-test split to enable model building. Next, I selected the following algorithms because they are the most popular ones when dealing with multi-class classification:
 
 | Model Abbreviation | Algorithm |
 | ------------------ | --------- |
@@ -46,3 +46,31 @@ At this point, since we have done the necessary transformations, we can do a tra
 | 'dtc' | DecisionTreeClassifier() |
 | 'nbc' | GaussianNB() |
 | 'gbc' | GradientBoostingClassifier() |
+
+Next, I use a `cross-validation predict` to do a 5-fold `StratifiedKfold` of each algorithm and measure their performance using `roc_auc_score`. It should be noted that given the target classes are imbalanced, we need to specify the `average` parameter as 'weighted' as that is how the mean accuracy should be calculated.
+
+A sample of how the model selection was done is as follows:
+```
+# cv argument is left at default for 2 reasons:
+# 1. default cross validation is 5
+# 2 if the estimator is a classifier and y is either binary or multiclass, StratifiedKFold is used automatically - perfect
+# for imbalanced labels
+
+def model_validation(model, X, y):
+
+    y_pred_proba = cross_val_predict(model, X, y, method='predict_proba')
+
+    return roc_auc_score(y, y_pred_proba, average='weighted', multi_class='ovr')
+
+score = 0.0
+best_score = 0.0
+best_model = None
+
+for model in tqdm(parameters.multiclass_algos_list):
+    score = model_validation(parameters.multiclass_algos_dict[model],
+                             X_train,
+                             y_train)
+    if score > best_score:
+        best_score = score
+        best_model = model
+```
