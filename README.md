@@ -29,3 +29,20 @@ Moving forward, after the basic cleaning we take a few steps to reduce the numbe
 
 Conventionally this would be a good stage to add some new features using the existing features but given the simplicity of the task I omitted it as the final model accuracy was really high. Hence, we can move on from this section.
 
+# Model Selection with Cross-Validation
+
+Now to get into the crux of the project. We have our 10 features selected through the feature importance attribute of the random forest regressor algorithm, so let's re-slice our original dataset to only keep the features that we need and define column transformers for them.
+
+The first step would be to create Pipeline objects that contain the steps for transformation, I've only included imputation and scaling as steps. For our dataset, I've created three Pipeline objects to deal with numeric or categorical columns, and to transform the target column seperately.
+
+For feature transform, we can combine our Pipeline objects into one `ColumnTransformer` object.
+
+At this point, since we have done the necessary transformations, we can do a train-test split to enable model building. Next, I selected the following algorithms because they are the most popular onces when dealing with multi-class classification:
+
+| Model Abbreviation | Algorithm |
+| ------------------ | --------- |
+| 'knn' | KNeighboursClassifier() |     
+| 'rfc' | RandomForestClassifier() |
+| 'dtc' | DecisionTreeClassifier() |
+| 'nbc' | GaussianNB() |
+| 'gbc' | GradientBoostingClassifier() |
