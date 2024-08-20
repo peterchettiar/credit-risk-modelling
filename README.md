@@ -50,7 +50,7 @@ At this point, since we have done the necessary transformations, we can do a tra
 Next, I use a `cross-validation predict` to do a 5-fold `StratifiedKfold` of each algorithm and measure their performance using `roc_auc_score`. It should be noted that given the target classes are imbalanced, we need to specify the `average` parameter as 'weighted' as that is how the mean accuracy should be calculated.
 
 A sample of how the model selection was done is as follows:
-```
+```python
 # cv argument is left at default for 2 reasons:
 # 1. default cross validation is 5
 # 2 if the estimator is a classifier and y is either binary or multiclass, StratifiedKFold is used automatically - perfect
@@ -83,7 +83,7 @@ Now comes the last part of the project. Our model selection gave us the best per
 This is where hyperparameter tuning comes in. I decided to experiment with three parameters: `n-estimators`, `learning_rate`, `max-depth`, and do a `RandomisedGridSearch` on a specified range not too far from the default values given the performance on default parameters were pretty good.
 
 A sample of the code for this portion is as follows:
-```
+```python
 # next we need to define our parameter grid
 # since the default values performed pretty well, our grid search should not be too far off from the default
 
